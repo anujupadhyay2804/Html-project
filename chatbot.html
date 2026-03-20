@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;}
+        #chat-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #6a7896;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; }
+        #chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;}
+        #user-input {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;}
+        #user-message {
+            flex-grow: 2;
+            padding: 5px;
+        }
+        #send-button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .edit-button {
+            cursor: pointer;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div id="user-input">
+            <input type="text" id="user-message" placeholder="Type your message..." onkeydown="if(event.key==='Enter'){sendMessage();}">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            var userMessage = document.getElementById('user-message').value;
+            addMessage('User', userMessage);
+            // Process user message and get chatbot response
+            var botResponse = getBotResponse(userMessage);
+            addMessage('Chatbot', botResponse);
+            document.getElementById('user-message').value = '';
+        }
+        function addMessage(sender, message) {
+            var chatBox = document.getElementById('chat-box');
+            var newMessage = document.createElement('p');
+            newMessage.innerHTML = '<strong>' + sender + ':</strong> ' + message + ' <span class="edit-button" onclick="editMessage(this)">Edit</span>';
+            chatBox.appendChild(newMessage);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+        }
+        function editMessage(editButton) {
+            var messageElement = editButton.parentElement;
+            var currentMessage = messageElement.innerText.trim().replace('Edit', '');
+            // Replace the message with an editable input field
+            var inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.value = currentMessage;
+            messageElement.innerHTML = '';
+            messageElement.appendChild(inputField);
+            // Focus on the input field
+            inputField.focus();
+            // Add a keydown event listener to handle the Enter key for updating the message
+            inputField.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    updateMessage(messageElement, inputField.value);
+                }
+            });
+        }
+        function updateMessage(messageElement, newMessage) {
+            messageElement.innerHTML = '<strong>User:</strong> ' + newMessage + ' <span class="edit-button" onclick="editMessage(this)">Edit</span>';
+            // Process user's updated message and get chatbot response
+            var botResponse = getBotResponse(newMessage);
+            addMessage('Chatbot', botResponse);
+        }
+        function getBotResponse(userMessage) {
+            // Basic rule-based logic for chatbot responses (you can customize this)
+            var lowercaseMessage = userMessage.toLowerCase();
+            if (lowercaseMessage.includes('hii')) {
+                return 'Hello! How can I help you?';
+            } else if (lowercaseMessage.includes('how are you')) {
+                return 'I am just a bot, but thank you for asking!';
+            } else if (lowercaseMessage.includes('bye')) {
+                return 'Goodbye! Have a great day.';
+            } else if (lowercaseMessage.includes('your name')) {
+                return 'I am a chatbot, so I don\'t have a name.';
+            } else if (lowercaseMessage.includes('it\'s my pleasure')) {
+                return 'The pleasure is mine!';
+            }else if(lowercaseMessage.includes('hii')) {
+                return 'hello, how are you ?';
+            }else if(lowercaseMessage.includes('fine')) {
+                return 'that is wonderful ' ;
+            }else if(lowercaseMessage.includes('thank you')) {
+                return 'It is my pleasure , Thank you for visiting  ' ;
+            }else if(lowercaseMessage.includes('something about you')) {
+                return 'I am generally a chatbot to chat with you '  ;
+            }else {
+                return 'Sorry I have no idea  ';}
+        }
+    </script>
+</body>
+</html>
